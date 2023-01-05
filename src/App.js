@@ -1,4 +1,6 @@
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
+const math = require('mathjs');
 
 function App() {
   const [calc, setCalc] = useState("");
@@ -17,12 +19,14 @@ function App() {
     }
 
     if (!operators.includes(value)) {
-      setResult(eval(calc + value).toString());
+      // Use math.eval() to evaluate the arithmetic expression
+      setResult(math.evaluate(calc + value).toString());
     }
 
     if (value === "%") {
       setCalc(calc.slice(0, -1));
-      const result = eval(calc) / 100;
+      // Use math.eval() to evaluate the arithmetic expression
+      const result = math.evaluate(calc) / 100;
       setResult(result.toString());
       return;
     }
@@ -39,11 +43,12 @@ function App() {
   };
 
   const calculate = () => {
-    setCalc(eval(calc).toString());
+    // Use math.eval() to evaluate the arithmetic expression
+    setCalc(math.evaluate(calc).toString());
   };
 
   const deleteLast = () => {
-    if (calc == "") {
+    if (calc === "") {
       return;
     } else {
       const value = calc.slice(0, -1);
