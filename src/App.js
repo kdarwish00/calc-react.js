@@ -1,167 +1,189 @@
-import React from 'react';
-import { useState } from 'react';
-const math = require('mathjs');
+import React, { useState } from 'react';
 
 function App() {
-  const [calc, setCalc] = useState("");
-  const [result, setResult] = useState("");
+  const [displayValue, setDisplayValue] = useState(0);
+  const [operand, setOperand] = useState(null); 
+  const [storedValue, setStoredValue] = useState(null);  
 
-  const operators = ["/", "+", "-", "*", "%", "toggle"];
+  function handleNumberClick(event) {
+    const value = event.target.value;  
+    displayValue === 0 ? setDisplayValue(value) : setDisplayValue(displayValue + value);  
+  }
 
-  const updateCalc = (value) => {
-    setCalc(calc + value);
 
-    if (
-      (operators.includes(value) && calc === "") ||
-      (operators.includes(value) && operators.includes(calc.slice(-1)))
-    ) {
-      return;
+  function handleOperandClick(event) {
+    const value = event.target.value; 
+    setOperand(value); 
+    setStoredValue(displayValue);  
+    setDisplayValue("0");  
+  }
+
+  function equalsClickHandler() {
+    let result;
+    switch (operand) {
+      case "+":
+        result = parseFloat(storedValue) + parseFloat(displayValue);
+        break;
+      case "-":
+        result = parseFloat(storedValue) - parseFloat(displayValue);
+        break;
+      case "*":
+        result = parseFloat(storedValue) * parseFloat(displayValue);
+        break;
+      case "/":
+        result = parseFloat(storedValue) / parseFloat(displayValue);
+        break;
+      default:
+        result = displayValue; 
     }
+  
+    setDisplayValue(result);  
+    setOperand(null); 
+    setStoredValue(null); 
+  }
+  
+  function invertClickHandler() {
+    setDisplayValue(displayValue === 0 ? 0 : -displayValue);
+  }
 
-    if (!operators.includes(value)) {
-      // Use math.eval() to evaluate the arithmetic expression
-      setResult(math.evaluate(calc + value).toString());
-    }
+  function resetClickHandler() { 
+    setDisplayValue(0);
+  }
 
-    if (value === "%") {
-      setCalc(calc.slice(0, -1));
-      // Use math.eval() to evaluate the arithmetic expression
-      const result = math.evaluate(calc) / 100;
-      setResult(result.toString());
-      return;
-    }
+  function percentClickHandler() {
+    setDisplayValue(displayValue === 0 || isNaN(displayValue) ? displayValue : displayValue / 100);
+  }
 
-    if (value === "toggle") {
-      if (result[0] === "-") {
-        setResult(result.slice(1));
-      } else {
-        setResult("-" + result);
-      }
-      setCalc(result);
-      return;
-    }
-  };
-
-  const calculate = () => {
-    // Use math.eval() to evaluate the arithmetic expression
-    setCalc(math.evaluate(calc).toString());
-  };
-
-  const deleteLast = () => {
-    if (calc === "") {
-      return;
-    } else {
-      const value = calc.slice(0, -1);
-      setCalc(value);
-    }
-  };
-
-  return (
+  return (  
     <div className="calculator">
       <div className="calculator__display">
-        {result ? <span>({result})</span> : ""}&nbsp;
-        {calc || "0"}
+        <span>{displayValue}</span>
       </div>
       <div className="calculator__layout">
         <div className="calculator__layout-buttons">
           <button 
           id="clear" 
           className="operation" 
-          onClick={deleteLast}
+          onClick={resetClickHandler}
           >
-            DEL
+            CE
           </button>
           <button
             id="percentage"
             className="operation"
-            onClick={() => updateCalc("%")}
+            onClick={percentClickHandler}
           >
-            %
+             %
           </button>
           <button
             id="toggle"
             className="operation"
-            onClick={() => updateCalc("toggle")}
+            onClick={invertClickHandler}
           >
             +/-
           </button>
           <button
             id="addition"
             className="operation"
-            onClick={() => updateCalc("+")}
+            value= "+"
+            onClick={handleOperandClick}
           >
             +
           </button>
 
-          <button id="seven" className="number" onClick={() => updateCalc("7")}>
+          <button 
+            id="seven" 
+            className="number" 
+            value="7"
+            onClick={handleNumberClick}
+          >
             7
           </button>
-          <button id="eight" className="number" onClick={() => updateCalc("8")}>
+          <button 
+            id="eight" 
+            className="number" 
+            value="8"
+            onClick={handleNumberClick}
+            >
             8
           </button>
-          <button id="nine" className="number" onClick={() => updateCalc("9")}>
+          <button 
+            id="nine" 
+            className="number" 
+            value="9"
+            onClick={handleNumberClick}
+          >
             9
           </button>
           <button
             id="subtraction"
             className="operation"
-            onClick={() => updateCalc("-")}
+            value= "-"
+            onClick={handleOperandClick}
           >
             -
           </button>
           <button 
             id="four" 
             className="number" 
-            onClick={() => updateCalc("4")}
+            value="4"
+            onClick={handleNumberClick}
           >
             4
           </button>
           <button 
             id="five" 
-            className="number" 
-            onClick={() => updateCalc("5")}
+            className="number"
+            value="5" 
+            onClick={handleNumberClick}
           >
             5
           </button>
           <button 
             id="six" 
             className="number" 
-            onClick={() => updateCalc("6")}
+            value="6"
+            onClick={handleNumberClick}
           >
             6
           </button>
           <button
             id="multiply"
             className="operation"
-            onClick={() => updateCalc("*")}
+            value= "*"
+            onClick={handleOperandClick}
           >
             *
           </button>
           <button 
             id="one" 
             className="number" 
-            onClick={() => updateCalc("1")}
+            value="1"
+            onClick={handleNumberClick}
           >
             1
           </button>
           <button 
             id="two" 
             className="number" 
-            onClick={() => updateCalc("2")}
+            value="2"
+            onClick={handleNumberClick}
           >
             2
           </button>
           <button 
             id="three" 
             className="number" 
-            onClick={() => updateCalc("3")}
+            value="3"
+            onClick={handleNumberClick}
           >
             3
           </button>
           <button
             id="divide"
             className="operation"
-            onClick={() => updateCalc("/")}
+            value= "/"
+            onClick={handleOperandClick}
           >
             /
           </button>
@@ -169,21 +191,23 @@ function App() {
           <button 
             id="zero" 
             className="number" 
-            onClick={() => updateCalc("0")}
+            value="0"
+            onClick={handleNumberClick}
           >
             0
           </button>
           <button
             id="decimal"
             className="number"
-            onClick={() => updateCalc(".")}
+            value="."
           >
             .
           </button>
           <button 
             id="equals" 
             className="operation" 
-            onClick={calculate}
+            value="="
+            onClick={equalsClickHandler}
           >
             =
           </button>
