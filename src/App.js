@@ -59,6 +59,13 @@ function App() {
     );
   }
 
+  function decimalClickHandler() {
+    if (displayValue.includes(".")) {
+      return; 
+    }
+    setDisplayValue(displayValue + ".");
+  }
+
   return (
     <div className="calculator">
       <div className="calculator__display">
@@ -197,8 +204,13 @@ function App() {
           >
             0
           </button>
-          <button id="decimal" className="number" value=".">
-            .
+          <button 
+            id="decimal" 
+            className="number" 
+            value="."
+            onClick={decimalClickHandler}
+            >
+              .
           </button>
           <button
             id="equals"
