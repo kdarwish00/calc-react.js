@@ -66,7 +66,7 @@
   
 }
 
-#equals {
+.operation_equals {
   grid-column: span 2;
   background-color: dodgerblue;
 }
