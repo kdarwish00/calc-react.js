@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Button from './Button'
 
 function App() {
   const [displayValue, setDisplayValue] = useState(0);
@@ -14,10 +15,15 @@ function App() {
 
   function handleOperandClick(event) {
     const value = event.target.value;
-    setOperand(value);
-    setStoredValue(displayValue);
-    setDisplayValue("0");
+    if (operand) {
+      setOperand(value);
+    } else {
+      setOperand(value);
+      setStoredValue(displayValue);
+      setDisplayValue("0");
+    }
   }
+  
 
   function equalsClickHandler() {
     let result;
@@ -73,153 +79,25 @@ function App() {
       </div>
       <div className="calculator__layout">
         <div className="calculator__layout-buttons">
-          <button id="clear" className="operation" onClick={resetClickHandler}>
-            CE
-          </button>
-          <button
-            id="percentage"
-            className="operation"
-            onClick={percentClickHandler}
-          >
-            %
-          </button>
-          <button
-            id="toggle"
-            className="operation"
-            onClick={invertClickHandler}
-          >
-            +/-
-          </button>
-          <button
-            id="addition"
-            className="operation"
-            value="+"
-            onClick={handleOperandClick}
-          >
-            +
-          </button>
-
-          <button
-            id="seven"
-            className="number"
-            value="7"
-            onClick={handleNumberClick}
-          >
-            7
-          </button>
-          <button
-            id="eight"
-            className="number"
-            value="8"
-            onClick={handleNumberClick}
-          >
-            8
-          </button>
-          <button
-            id="nine"
-            className="number"
-            value="9"
-            onClick={handleNumberClick}
-          >
-            9
-          </button>
-          <button
-            id="subtraction"
-            className="operation"
-            value="-"
-            onClick={handleOperandClick}
-          >
-            -
-          </button>
-          <button
-            id="four"
-            className="number"
-            value="4"
-            onClick={handleNumberClick}
-          >
-            4
-          </button>
-          <button
-            id="five"
-            className="number"
-            value="5"
-            onClick={handleNumberClick}
-          >
-            5
-          </button>
-          <button
-            id="six"
-            className="number"
-            value="6"
-            onClick={handleNumberClick}
-          >
-            6
-          </button>
-          <button
-            id="multiply"
-            className="operation"
-            value="*"
-            onClick={handleOperandClick}
-          >
-            *
-          </button>
-          <button
-            id="one"
-            className="number"
-            value="1"
-            onClick={handleNumberClick}
-          >
-            1
-          </button>
-          <button
-            id="two"
-            className="number"
-            value="2"
-            onClick={handleNumberClick}
-          >
-            2
-          </button>
-          <button
-            id="three"
-            className="number"
-            value="3"
-            onClick={handleNumberClick}
-          >
-            3
-          </button>
-          <button
-            id="divide"
-            className="operation"
-            value="/"
-            onClick={handleOperandClick}
-          >
-            /
-          </button>
-
-          <button
-            id="zero"
-            className="number"
-            value="0"
-            onClick={handleNumberClick}
-          >
-            0
-          </button>
-          <button 
-            id="decimal" 
-            className="number" 
-            value="."
-            onClick={decimalClickHandler}
-            >
-              .
-          </button>
-          <button
-            id="equals"
-            className="operation"
-            value="="
-            onClick={equalsClickHandler}
-          >
-            =
-          </button>
+          <Button onClick={resetClickHandler} className="operation" value="CE" />
+          <Button onClick={percentClickHandler} className="operation" value="%" />
+          <Button onClick={invertClickHandler} className="operation" value="+/-" />
+          <Button onClick={handleOperandClick} className="operation" value="+" />
+          <Button onClick={handleNumberClick} className="number" value="7" />
+          <Button onClick={handleNumberClick} className="number" value="8" />
+          <Button onClick={handleNumberClick} className="number" value="9" />
+          <Button onClick={handleOperandClick} className="operation" value="-" />
+          <Button onClick={handleNumberClick} className="number" value="4" />
+          <Button onClick={handleNumberClick} className="number" value="5" />
+          <Button onClick={handleNumberClick} className="number" value="6" />
+          <Button onClick={handleOperandClick} className="operation" value="*" />
+          <Button onClick={handleNumberClick} className="number" value="1" />
+          <Button onClick={handleNumberClick} className="number" value="2" />
+          <Button onClick={handleNumberClick} className="number" value="3" />
+          <Button onClick={handleOperandClick} className="operation" value="/" />
+          <Button onClick={handleNumberClick} className="number" value="0" />
+          <Button onClick={decimalClickHandler} className="number" value="." />
+          <Button onClick={equalsClickHandler} className="operation_equals" value="=" />
         </div>
       </div>
     </div>
