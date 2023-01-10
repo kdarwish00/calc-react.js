@@ -4,14 +4,21 @@ import Button from './Button'
 function App() {
   const [displayValue, setDisplayValue] = useState(0);
   const [operand, setOperand] = useState(null);
-  const [storedValue, setStoredValue] = useState(null);
 
   function handleNumberClick(event) {
     const value = event.target.value;
-    displayValue === 0
-      ? setDisplayValue(value)
-      : setDisplayValue(displayValue + value);
+    if (operand) {
+      // Concatenate the operand and the next input value together
+      setDisplayValue(`${displayValue}${operand}${value}`);
+      // Reset the operand and stored value
+      setOperand(null);
+    } else {
+      displayValue === 0
+        ? setDisplayValue(value)
+        : setDisplayValue(displayValue + value);
+    }
   }
+  
 
   function handleOperandClick(event) {
     const value = event.target.value;
@@ -19,35 +26,50 @@ function App() {
       setOperand(value);
     } else {
       setOperand(value);
-      setStoredValue(displayValue);
-      setDisplayValue("0");
     }
   }
   
 
   function equalsClickHandler() {
-    let result;
-    switch (operand) {
-      case "+":
-        result = parseFloat(storedValue) + parseFloat(displayValue);
-        break;
-      case "-":
-        result = parseFloat(storedValue) - parseFloat(displayValue);
-        break;
-      case "*":
-        result = parseFloat(storedValue) * parseFloat(displayValue);
-        break;
-      case "/":
-        result = parseFloat(storedValue) / parseFloat(displayValue);
-        break;
-      default:
-        result = displayValue;
+    // Convert the display value to a string
+    const displayValueString = displayValue.toString();
+  
+    // Split the display value into individual values and operands
+    const values = displayValueString.split(/[\+\-\*\/]/);
+    const operands = displayValueString.split(/[^\+\-\*\/]+/).filter(x => x);
+  
+    // Return early if no input has been entered
+    if (!values.length) {
+      return;
     }
-
-    setDisplayValue(result);
+  
+    let result = parseFloat(values[0]);
+    for (let i = 0; i < operands.length; i++) {
+      const operand = operands[i];
+      const value = parseFloat(values[i + 1]);
+      switch (operand) {
+        case "+":
+          result += value;
+          break;
+        case "-":
+          result -= value;
+          break;
+        case "*":
+          result *= value;
+          break;
+        case "/":
+          result /= value;
+          break;
+        default:
+          result = displayValue;
+      }
+    }
+  
+    setDisplayValue(result.toString());
     setOperand(null);
-    setStoredValue(null);
   }
+  
+  
 
   function invertClickHandler() {
     setDisplayValue(displayValue === 0 ? 0 : -displayValue);
@@ -66,17 +88,27 @@ function App() {
   }
 
   function decimalClickHandler() {
-    if (displayValue.includes(".")) {
+    let currentValue;
+    if (typeof displayValue === "number") {
+      currentValue = displayValue.toString();
+    } else {
+      // Get the current value from the display value
+      const values = displayValue.split(/[\+\-\*\/]/);
+      currentValue = values[values.length - 1];
+    }
+  
+    if (currentValue.includes(".")) {
       return; 
     }
-    setDisplayValue(displayValue + ".");
+    setDisplayValue(`${displayValue}.`);
   }
+    
 
   return (
     <div className="calculator">
-      <div className="calculator__display">
-        <span>{displayValue}</span>
-      </div>
+    <div className="calculator__display">
+      <span>{displayValue}</span>
+    </div>
       <div className="calculator__layout">
         <div className="calculator__layout-buttons">
           <Button onClick={resetClickHandler} className="operation" value="CE" />
